@@ -1,13 +1,17 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.LoginRequest;
 import com.sanvi.sanvi_api.domain.User;
 import com.sanvi.sanvi_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:1420")
 @RequestMapping("/user")
 public class UserControler {
 
@@ -24,14 +28,19 @@ public class UserControler {
 
     /**
      * Realiza login
-     * @param username Usuário
-     * @param password Senha
+     * @param loginRequest { username: string, password: string}
      * @return Usuário Logado
      * @throws RuntimeException Usuário não encontrado ou senha incorreta
      */
+    @CrossOrigin(origins = "http://localhost:1420")
     @PostMapping("login")
-    public User login(@RequestBody String username, String password) {
-        return userService.login(username, password);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            User user = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
+            return ResponseEntity.ok(user);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PostMapping("create")

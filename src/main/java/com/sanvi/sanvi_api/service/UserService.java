@@ -3,7 +3,9 @@ package com.sanvi.sanvi_api.service;
 import com.sanvi.sanvi_api.domain.User;
 import com.sanvi.sanvi_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,12 +24,11 @@ public class UserService {
 
     public User login(String username, String password){
         User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        //Criptografar senha
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
         if(user.getPassword().equals(password)) {
             return user;
         } else {
-            throw new RuntimeException("Senha incorreta");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Senha incorreta");
         }
     }
 
