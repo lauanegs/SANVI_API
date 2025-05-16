@@ -15,18 +15,26 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person {
+public class Person extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @Column(length = 150)
     private String name;
-    private Long CPF;
+
+    @Column(length = 11)
+    private String CPF;
+
     private Date birthDate;
+
     @Column(length = 15)
     private Long phoneNumber;
+
     private String address;
+    private int addressNumber;
+    private String neighborhood;
+
     private Gender gender;
     @Column(length = 10)
     private String rg;
