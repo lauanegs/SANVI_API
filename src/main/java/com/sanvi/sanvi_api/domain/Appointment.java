@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class Appointment {
             inverseJoinColumns = @JoinColumn(name = "specialist_id")
     )
     private List<Specialist> specialists;
-    private Date date;
+    private LocalDateTime date;
+    private String confirmPhoneNumber;
     private AppointmentStatus status;
+
+    private boolean hasTreatment;
+
+
 }
