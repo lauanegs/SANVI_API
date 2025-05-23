@@ -4,6 +4,8 @@ import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.ManyToOne;
+
 
 import java.util.Date;
 import java.util.List;
@@ -20,13 +22,12 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
-    @ManyToMany
-    @JoinTable(
-            name = "appointment_specialist",
-            joinColumns = @JoinColumn(name = "appointment_id"),
-            inverseJoinColumns = @JoinColumn(name = "specialist_id")
-    )
-    private List<Specialist> specialists;
+
+    @ManyToOne
+    @JoinColumn(name = "specialist_id", nullable = false)
+    private Specialist specialist;
+
     private Date date;
     private AppointmentStatus status;
 }
+
