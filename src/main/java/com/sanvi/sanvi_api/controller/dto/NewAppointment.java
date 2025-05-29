@@ -19,7 +19,7 @@ public class NewAppointment {
     private LocalDateTime date;
     private String confirmPhoneNumber;
     private boolean hasTreatment;
-    private Long treatmentId;
+    private Long treatment_id;
     private BigDecimal value;
 
 }

@@ -31,7 +31,7 @@ public class PaymentEntry
     private PaymentStatus status;
 
     @ManyToOne
-    @JoinColumn(name="treatment_id", nullable = false)
+    @JoinColumn(name="treatment_id", nullable = true)
     private Treatment treatment;
 
     private int billingPaid;
