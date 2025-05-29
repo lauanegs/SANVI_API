@@ -89,7 +89,7 @@ public class AppointmentService {
                 Appointment appointmentEntity = new Appointment(
                                 patient,
                                 specialist,
-                                AppointmentStatus.Criado,
+                                appointment.getStatus(),
                                 appointment.isHasTreatment(),
                                 appointment.getDate(),
                                 appointment.getConfirmPhoneNumber());

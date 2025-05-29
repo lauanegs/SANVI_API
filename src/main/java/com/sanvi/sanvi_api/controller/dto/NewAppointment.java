@@ -23,5 +23,6 @@ public class NewAppointment {
     private boolean hasTreatment;
     private Long treatment_id;
     private BigDecimal value;
+    private AppointmentStatus status;
 
 }
