@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,5 +23,6 @@ public class NewAppointment {
     private boolean hasTreatment;
     private Long treatment_id;
     private BigDecimal value;
+    private AppointmentStatus status;
 
 }

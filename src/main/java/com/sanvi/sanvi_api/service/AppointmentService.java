@@ -48,36 +48,39 @@ public class AppointmentService {
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Especialista não encontrado."));
 
-                if (appointment.isHasTreatment()) {
-                        Treatment treatment = treatmentRepository.findById(appointment.getTreatment_id())
-                                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                        "Tratamento não encontrado."));
+                BigDecimal value = appointment.getValue();
+                if (value != null && value.compareTo(BigDecimal.ZERO) > 0) {
+                        if (appointment.isHasTreatment()) {
+                                Treatment treatment = treatmentRepository.findById(appointment.getTreatment_id())
+                                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                                "Tratamento não encontrado."));
 
-                        BigDecimal value = appointment.getValue();
+                                
 
-                        PaymentEntry paymentEntry = new PaymentEntry();
-                        paymentEntry.setPatient(patient);
-                        paymentEntry.setTreatment(treatment);
-                        paymentEntry.setValue(value);
-                        paymentEntry.setStatus(PaymentStatus.Pendente);
-                        paymentEntry.setBillingPaid(0);
-                        paymentEntry.setBillingLeft(1);
+                                PaymentEntry paymentEntry = new PaymentEntry();
+                                paymentEntry.setPatient(patient);
+                                paymentEntry.setTreatment(treatment);
+                                paymentEntry.setValue(value);
+                                paymentEntry.setStatus(PaymentStatus.Pendente);
+                                paymentEntry.setBillingPaid(0);
+                                paymentEntry.setBillingLeft(1);
 
-                        treatment.getPaymentEntries().add(paymentEntry);
-                        paymentEntryRepository.save(paymentEntry);
-                } else {
-                        BigDecimal value = appointment.getValue();
+                                treatment.getPaymentEntries().add(paymentEntry);
+                                paymentEntryRepository.save(paymentEntry);
+                        } else {
+                                
 
-                        PaymentEntry paymentEntry = new PaymentEntry();
-                        paymentEntry.setPatient(patient);
-                        paymentEntry.setTreatment(null);
-                        paymentEntry.setValue(value);
-                        paymentEntry.setStatus(PaymentStatus.Pendente);
-                        paymentEntry.setBillingPaid(0);
-                        paymentEntry.setBillingLeft(1);
+                                PaymentEntry paymentEntry = new PaymentEntry();
+                                paymentEntry.setPatient(patient);
+                                paymentEntry.setTreatment(null);
+                                paymentEntry.setValue(value);
+                                paymentEntry.setStatus(PaymentStatus.Pendente);
+                                paymentEntry.setBillingPaid(0);
+                                paymentEntry.setBillingLeft(1);
 
-                        paymentEntryRepository.save(paymentEntry);
+                                paymentEntryRepository.save(paymentEntry);
 
+                        }
                 }
 
                 Appointment appointmentEntity = new Appointment(
@@ -119,14 +122,11 @@ public class AppointmentService {
 
                 existingAppointment.setPatient(patient);
                 existingAppointment.setSpecialist(specialist);
-                existingAppointment.setStatus(AppointmentStatus.Criado); // ou outro status conforme lógica
-                existingAppointment.setHasTreatment(appointment.isHasTreatment());
+                existingAppointment.setStatus(appointment.getStatus());
                 existingAppointment.setDate(appointment.getDate());
                 existingAppointment.setConfirmPhoneNumber(appointment.getConfirmPhoneNumber());
 
-                // Se houver lógica específica para tratamento no update, pode ser implementada
-                // aqui
-
                 return appointmentRepository.save(existingAppointment);
         }
+
 }
