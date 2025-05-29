@@ -16,12 +16,12 @@ import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 @NoArgsConstructor
 public class NewAppointment {
 
-    private Long patient_id;
-    private Long specialist_id;
+    private Long patientId;
+    private Long specialistId;
     private LocalDateTime date;
     private String confirmPhoneNumber;
     private boolean hasTreatment;
-    private Long treatment_id;
+    private Long treatmentId;
     private BigDecimal value;
     private AppointmentStatus status;
 

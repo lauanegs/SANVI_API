@@ -16,8 +16,8 @@ import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 @NoArgsConstructor
 public class UpdateAppointment {
 
-    private Long patient_id;
-    private Long specialist_id;
+    private Long patientId;
+    private Long specialistId;
     private LocalDateTime date;
     private String confirmPhoneNumber;
     private AppointmentStatus status;
