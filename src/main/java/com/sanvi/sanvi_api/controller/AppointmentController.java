@@ -1,5 +1,6 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.NewAppointment;
 import com.sanvi.sanvi_api.domain.Appointment;
 import com.sanvi.sanvi_api.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,9 @@ public class AppointmentController {
     }
 
     @PostMapping("create")
-    public Appointment create(@RequestBody Appointment appointment) {
-        return appointmentService.create(appointment);
+    //O request não vem com os objetos completos, mas com os IDs, por isso o DTO NewAppointment
+    public Appointment create(@RequestBody NewAppointment newAppointment) {
+        return appointmentService.create(newAppointment);
     }
 
     @DeleteMapping("{id}")

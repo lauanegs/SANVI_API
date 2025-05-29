@@ -35,6 +35,10 @@ public class Treatment {
     )
     private List<Patient> patients;
 
+    @OneToMany
+    private List<PaymentEntry> paymentEntries;
+
+    @OneToMany
     private List<JourneyEvent> events;
 
 }

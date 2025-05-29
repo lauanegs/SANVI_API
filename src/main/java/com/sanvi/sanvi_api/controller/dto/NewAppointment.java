@@ -15,7 +15,7 @@ import java.util.List;
 public class NewAppointment {
 
     private Long patient_id;
-    private List<Long> specialists_ids;
+    private Long specialist_id;
     private LocalDateTime date;
     private String confirmPhoneNumber;
     private boolean hasTreatment;

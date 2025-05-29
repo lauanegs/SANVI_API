@@ -30,6 +30,8 @@ public class PaymentEntry
 
     private PaymentStatus status;
 
+    @ManyToOne
+    @JoinColumn(name="treatment_id", nullable = false)
     private Treatment treatment;
 
     private int billingPaid;

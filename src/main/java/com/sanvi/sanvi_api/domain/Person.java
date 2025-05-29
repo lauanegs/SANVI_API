@@ -32,11 +32,25 @@ public class Person extends BaseEntity {
     private Long phoneNumber;
 
     private String address;
+
+    @Column
     private int addressNumber;
+
     private String neighborhood;
 
     private Gender gender;
     @Column(length = 10)
     private String rg;
 
+    public Person(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber, String neighborhood, Gender gender, String rg) {
+        this.name = name;
+        this.CPF = CPF;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.addressNumber = addressNumber;
+        this.neighborhood = neighborhood;
+        this.gender = gender;
+        this.rg = rg;
+    }
 }

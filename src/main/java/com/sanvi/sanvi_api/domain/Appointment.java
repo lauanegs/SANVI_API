@@ -2,7 +2,9 @@ package com.sanvi.sanvi_api.domain;
 
 import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.ManyToOne;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -35,4 +39,12 @@ public class Appointment {
     private LocalDateTime date;
     private String confirmPhoneNumber;
 
+    public Appointment(Patient patient, Specialist specialist, AppointmentStatus status, boolean hasTreatment, LocalDateTime date, String confirmPhoneNumber) {
+        this.patient = patient;
+        this.specialist = specialist;
+        this.status = status;
+        this.hasTreatment = hasTreatment;
+        this.date = date;
+        this.confirmPhoneNumber = confirmPhoneNumber;
+    }
 }
