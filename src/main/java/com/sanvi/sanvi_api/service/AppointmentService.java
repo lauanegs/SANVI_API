@@ -1,5 +1,6 @@
 package com.sanvi.sanvi_api.service;
 
+import com.sanvi.sanvi_api.controller.dto.UpdateAppointment;
 import com.sanvi.sanvi_api.controller.dto.NewAppointment;
 import com.sanvi.sanvi_api.domain.Appointment;
 import com.sanvi.sanvi_api.domain.Patient;
@@ -13,6 +14,8 @@ import com.sanvi.sanvi_api.repository.PatientRepository;
 import com.sanvi.sanvi_api.repository.PaymentEntryRepository;
 import com.sanvi.sanvi_api.repository.TreatmentRepository;
 import com.sanvi.sanvi_api.repository.SpecialistRepository;
+
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -108,7 +111,7 @@ public class AppointmentService {
                 appointmentRepository.deleteById(id);
         }
 
-        public Appointment update(Long id, NewAppointment appointment) {
+        public Appointment update(Long id, UpdateAppointment appointment) {
                 Appointment existingAppointment = appointmentRepository.findById(id)
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Agendamento não encontrado."));

@@ -1,8 +1,11 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.UpdateAppointment;
 import com.sanvi.sanvi_api.controller.dto.NewAppointment;
 import com.sanvi.sanvi_api.domain.Appointment;
 import com.sanvi.sanvi_api.service.AppointmentService;
+
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +41,7 @@ public class AppointmentController {
     }
 
     @PutMapping("{id}")
-    public Appointment update(@PathVariable("id") Long id, @RequestBody NewAppointment newAppointmentDto) {
-        return appointmentService.update(id, newAppointmentDto);
+    public Appointment update(@PathVariable("id") Long id, @RequestBody UpdateAppointment updateAppointmentDto) {
+        return appointmentService.update(id, updateAppointmentDto);
     }
 }
