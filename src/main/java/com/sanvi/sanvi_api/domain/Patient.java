@@ -4,7 +4,9 @@ import com.sanvi.sanvi_api.domain.enums.Gender;
 import com.sanvi.sanvi_api.service.PatientService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Patient extends Person{
 
     private String profession;

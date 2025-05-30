@@ -1,5 +1,6 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.MedicalRecordDTO;
 import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,9 @@ public class PatientController {
         return patientService.update(patient);
     }
 
+    @PostMapping("/medical_record")
+    public void setMedicalRecord(@RequestBody MedicalRecordDTO medicalRecord){
+        patientService.setMedicalRecord(medicalRecord);
+
+    }
 }
