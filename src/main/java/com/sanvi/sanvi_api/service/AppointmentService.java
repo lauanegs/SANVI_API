@@ -1,69 +1,135 @@
 package com.sanvi.sanvi_api.service;
 
+import com.sanvi.sanvi_api.controller.dto.UpdateAppointment;
 import com.sanvi.sanvi_api.controller.dto.NewAppointment;
 import com.sanvi.sanvi_api.domain.Appointment;
 import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.domain.PaymentEntry;
 import com.sanvi.sanvi_api.domain.Specialist;
+import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 import com.sanvi.sanvi_api.domain.enums.PaymentStatus;
 import com.sanvi.sanvi_api.repository.AppointmentRepository;
 import com.sanvi.sanvi_api.repository.PatientRepository;
 import com.sanvi.sanvi_api.repository.PaymentEntryRepository;
+import com.sanvi.sanvi_api.repository.TreatmentRepository;
 import com.sanvi.sanvi_api.repository.SpecialistRepository;
+
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-    private PatientRepository patientRepository;
-    private PaymentEntryRepository paymentEntryRepository;
-    private SpecialistRepository specialistRepository;
+        @Autowired
+        private TreatmentRepository treatmentRepository;
 
-    public Appointment create(NewAppointment appointment){
+        @Autowired
+        private AppointmentRepository appointmentRepository;
 
-//        Tratar caso 'Não vinculado a tratamento'
-//        if(!appointment.isHasTreatment()){ }
+        @Autowired
+        private PatientRepository patientRepository;
 
-//        Tratar caso 'Vinculado a tratamento'
-//        if(appointment.isHasTreatment()){ }
+        @Autowired
+        private PaymentEntryRepository paymentEntryRepository;
 
-        // Buscar objetos a partir dos IDs que chegam no request: OBSERVAR controller/dto/NewAppointment
-        Patient patient = patientRepository.findById(appointment.getPatient_id()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não encontrado."));
-        Specialist specialist = specialistRepository.findById(appointment.getSpecialist_id()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Especialista não encontrado."));
-        Appointment appointment2 = new Appointment(patient,
-                                        specialist,
-                                        AppointmentStatus.Criado,
-                                        appointment.isHasTreatment(),
-                                        appointment.getDate(),
-                                        appointment.getConfirmPhoneNumber() );
+        @Autowired
+        private SpecialistRepository specialistRepository;
 
-        return appointmentRepository.save(appointment2);
-    }
+        public Appointment create(NewAppointment appointment) {
 
-    public List<Appointment> list(){
-        return appointmentRepository.findAll();
-    }
+                Patient patient = patientRepository.findById(appointment.getPatient_id())
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Paciente não encontrado."));
+                Specialist specialist = specialistRepository.findById(appointment.getSpecialist_id())
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Especialista não encontrado."));
 
-    public Appointment findById(Long id){
-        return appointmentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agendamento não encontrado."));
-    }
+                BigDecimal value = appointment.getValue();
+                if (value != null && value.compareTo(BigDecimal.ZERO) > 0) {
+                        if (appointment.isHasTreatment()) {
+                                Treatment treatment = treatmentRepository.findById(appointment.getTreatment_id())
+                                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                                "Tratamento não encontrado."));
 
-    public void delete(Long id){
-        appointmentRepository.deleteById(id);
-    }
+                                
 
-    //Fazer o update similar ao create
-    public Appointment update(Appointment appointment){
-        return appointmentRepository.save(appointment);
-    }
+                                PaymentEntry paymentEntry = new PaymentEntry();
+                                paymentEntry.setPatient(patient);
+                                paymentEntry.setTreatment(treatment);
+                                paymentEntry.setValue(value);
+                                paymentEntry.setStatus(PaymentStatus.Pendente);
+                                paymentEntry.setBillingPaid(0);
+                                paymentEntry.setBillingLeft(1);
+
+                                treatment.getPaymentEntries().add(paymentEntry);
+                                paymentEntryRepository.save(paymentEntry);
+                        } else {
+                                
+
+                                PaymentEntry paymentEntry = new PaymentEntry();
+                                paymentEntry.setPatient(patient);
+                                paymentEntry.setTreatment(null);
+                                paymentEntry.setValue(value);
+                                paymentEntry.setStatus(PaymentStatus.Pendente);
+                                paymentEntry.setBillingPaid(0);
+                                paymentEntry.setBillingLeft(1);
+
+                                paymentEntryRepository.save(paymentEntry);
+
+                        }
+                }
+
+                Appointment appointmentEntity = new Appointment(
+                                patient,
+                                specialist,
+                                appointment.getStatus(),
+                                appointment.isHasTreatment(),
+                                appointment.getDate(),
+                                appointment.getConfirmPhoneNumber());
+
+                return appointmentRepository.save(appointmentEntity);
+        }
+
+        public List<Appointment> list() {
+                return appointmentRepository.findAll();
+        }
+
+        public Appointment findById(Long id) {
+                return appointmentRepository.findById(id)
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Agendamento não encontrado."));
+        }
+
+        public void delete(Long id) {
+                appointmentRepository.deleteById(id);
+        }
+
+        public Appointment update(Long id, UpdateAppointment appointment) {
+                Appointment existingAppointment = appointmentRepository.findById(id)
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Agendamento não encontrado."));
+
+                Patient patient = patientRepository.findById(appointment.getPatient_id())
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Paciente não encontrado."));
+                Specialist specialist = specialistRepository.findById(appointment.getSpecialist_id())
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                "Especialista não encontrado."));
+
+                existingAppointment.setPatient(patient);
+                existingAppointment.setSpecialist(specialist);
+                existingAppointment.setStatus(appointment.getStatus());
+                existingAppointment.setDate(appointment.getDate());
+                existingAppointment.setConfirmPhoneNumber(appointment.getConfirmPhoneNumber());
+
+                return appointmentRepository.save(existingAppointment);
+        }
 
 }

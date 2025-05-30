@@ -1,8 +1,11 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.UpdateAppointment;
 import com.sanvi.sanvi_api.controller.dto.NewAppointment;
 import com.sanvi.sanvi_api.domain.Appointment;
 import com.sanvi.sanvi_api.service.AppointmentService;
+
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +14,6 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/appointments")
-
 public class AppointmentController {
 
     @Autowired
@@ -23,12 +25,12 @@ public class AppointmentController {
     }
 
     @GetMapping("{id}")
-    public Appointment findById(@PathVariable("id") Long Id) {
-        return appointmentService.findById(Id);
+    public Appointment findById(@PathVariable("id") Long id) {
+        return appointmentService.findById(id);
     }
 
-    @PostMapping("create")
-    //O request não vem com os objetos completos, mas com os IDs, por isso o DTO NewAppointment
+    @PostMapping("/create")
+    // O request não vem com os objetos completos, mas com os IDs, por isso o DTO NewAppointment
     public Appointment create(@RequestBody NewAppointment newAppointment) {
         return appointmentService.create(newAppointment);
     }
@@ -39,9 +41,7 @@ public class AppointmentController {
     }
 
     @PutMapping("{id}")
-    public Appointment update(@PathVariable("id") Long id, @RequestBody Appointment appointment) {
-        appointment.setId(id); // Garante que o ID está correto
-        return appointmentService.update(appointment);
+    public Appointment update(@PathVariable("id") Long id, @RequestBody UpdateAppointment updateAppointmentDto) {
+        return appointmentService.update(id, updateAppointmentDto);
     }
-
 }

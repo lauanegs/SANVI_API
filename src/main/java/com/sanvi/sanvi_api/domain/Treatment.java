@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,8 +36,8 @@ public class Treatment {
     )
     private List<Patient> patients;
 
-    @OneToMany
-    private List<PaymentEntry> paymentEntries;
+    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentEntry> paymentEntries = new ArrayList<>();
 
     @OneToMany
     private List<JourneyEvent> events;
