@@ -1,21 +1,21 @@
 package com.sanvi.sanvi_api.domain;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import com.vladmihalcea.hibernate.type.json.JsonType;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
+import org.hibernate.mapping.TypeDef;
 
+
+@Entity
 public class MedicalRecord extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
+    private MedicalRecordData medicalRecordData;
 
-    @OneToOne(orphanRemoval = true)
-    private Patient patient;
 
-    private String queixaPrincipal;
-
-    private String historicoDoencaPrincipal;
 
 }
