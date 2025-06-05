@@ -44,17 +44,17 @@ public class AppointmentService {
 
         public Appointment create(NewAppointment appointment) {
 
-                Patient patient = patientRepository.findById(appointment.getPatient_id())
+                Patient patient = patientRepository.findById(appointment.getPatientId())
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Paciente não encontrado."));
-                Specialist specialist = specialistRepository.findById(appointment.getSpecialist_id())
+                Specialist specialist = specialistRepository.findById(appointment.getSpecialistId())
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Especialista não encontrado."));
 
                 BigDecimal value = appointment.getValue();
                 if (value != null && value.compareTo(BigDecimal.ZERO) > 0) {
                         if (appointment.isHasTreatment()) {
-                                Treatment treatment = treatmentRepository.findById(appointment.getTreatment_id())
+                                Treatment treatment = treatmentRepository.findById(appointment.getTreatmentId())
                                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                                 "Tratamento não encontrado."));
 
@@ -116,10 +116,10 @@ public class AppointmentService {
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Agendamento não encontrado."));
 
-                Patient patient = patientRepository.findById(appointment.getPatient_id())
+                Patient patient = patientRepository.findById(appointment.getPatientId())
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Paciente não encontrado."));
-                Specialist specialist = specialistRepository.findById(appointment.getSpecialist_id())
+                Specialist specialist = specialistRepository.findById(appointment.getSpecialistId())
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                                 "Especialista não encontrado."));
 
