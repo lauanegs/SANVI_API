@@ -9,4 +9,9 @@ import lombok.Setter;
 public class MedicalRecordDTO {
     private Long patientId;
     private MedicalRecordData data;
+    private Boolean isPregnant;
+
+    private Boolean hasHealthProblem;
+
+    private Boolean hasMedicalTreatment;
 }

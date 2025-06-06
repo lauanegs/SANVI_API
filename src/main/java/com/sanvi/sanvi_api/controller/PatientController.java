@@ -20,17 +20,17 @@ public class PatientController {
         return patientService.list();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Patient findById(@PathVariable("id") Long Id){
         return patientService.findById(Id);
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public Patient create(@RequestBody Patient patient){
         return patientService.create(patient);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id){
         patientService.delete(id);
     }

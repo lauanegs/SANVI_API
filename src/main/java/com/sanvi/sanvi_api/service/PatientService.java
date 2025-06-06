@@ -40,14 +40,25 @@ public class PatientService {
         return patientRepository.findById(Id).orElseThrow(() -> new RuntimeException("Paciente não encontrado."));
     }
 
-    public void setMedicalRecord(MedicalRecordDTO medicalRecord) {
-        Patient patient = patientRepository.findById(medicalRecord.getPatientId()).orElseThrow(()->new RuntimeException("Paciente não encontrado"));
-        MedicalRecord medicalRecord1 = new MedicalRecord();
-        medicalRecord1.setId(medicalRecord.getPatientId());
-        medicalRecord1.setMedicalRecordData(medicalRecord.getData());
-        medicalRecordRepository.save(medicalRecord1);
+    public void setMedicalRecord(MedicalRecordDTO dto) {
+        Patient patient = patientRepository.findById(dto.getPatientId())
+            .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
-        patient.getMedicalRecord().setMedicalRecordData(medicalRecord.getData());
+        MedicalRecord record = patient.getMedicalRecord();
+        if (record == null) {
+            record = new MedicalRecord();
+
+            record.setId(patient.getId());
+
+            record.setPatient(patient);
+            patient.setMedicalRecord(record);
+        }
+
+        record.setMedicalRecordData(dto.getData());
+        record.setIsPregnant(dto.getIsPregnant());
+        record.setHasHealthProblem(dto.getHasHealthProblem());
+        record.setHasMedicalTreatment(dto.getHasMedicalTreatment());
+
         patientRepository.save(patient);
     }
 }

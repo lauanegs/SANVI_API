@@ -9,8 +9,11 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class MedicalRecordData implements Serializable {
-
-    private String pergunta1;
-    private String pergunta2;
-    private String pergunta3;
+    private String mainComplaint;
+    private String diseaseHistory;
+    private String pastMedicalHistory;
+    private String healthProblem;
+    private String medicalTreatment;
+    private String familyMedicalHistory;
 }
+

@@ -1,5 +1,6 @@
 package com.sanvi.sanvi_api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sanvi.sanvi_api.domain.enums.Gender;
 import com.sanvi.sanvi_api.service.PatientService;
 import jakarta.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Patient extends Person{
 
     private String profession;
