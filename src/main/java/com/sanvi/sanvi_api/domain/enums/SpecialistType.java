@@ -1,7 +1,7 @@
 package com.sanvi.sanvi_api.domain.enums;
 
 public enum SpecialistType {
-    Dentista,
+    DENTISTA,
     ASB,
-    Funcionário
+    FUNCIONARIO
 }
