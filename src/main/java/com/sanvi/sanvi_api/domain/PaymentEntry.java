@@ -29,6 +29,7 @@ public class PaymentEntry
 
     private BigDecimal value;
 
+    @Enumerated(EnumType.STRING) 
     private PaymentStatus status;
 
     @ManyToOne
