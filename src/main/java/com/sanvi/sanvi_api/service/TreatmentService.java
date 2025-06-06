@@ -1,5 +1,6 @@
 package com.sanvi.sanvi_api.service;
 
+import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.repository.TreatmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class TreatmentService {
         return treatmentRepository.findAll();
     }
 
+    public List<Treatment> listTreatmentsByPatientId(Patient patient) {
+        return treatmentRepository.findAllByPatient(patient);
+    }
+
     public Treatment findById(Long id) {
         return treatmentRepository.findById(id).orElse(null);
     }
@@ -32,4 +37,5 @@ public class TreatmentService {
     public Treatment update(Treatment treatment) {
         return treatmentRepository.save(treatment);
     }
+
 }

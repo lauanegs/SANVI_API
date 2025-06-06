@@ -2,7 +2,10 @@ package com.sanvi.sanvi_api.controller;
 
 import com.sanvi.sanvi_api.controller.dto.MedicalRecordDTO;
 import com.sanvi.sanvi_api.domain.Patient;
+import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.service.PatientService;
+import com.sanvi.sanvi_api.service.TreatmentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +18,17 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private TreatmentService treatmentService;
+
     @GetMapping
     public List<Patient> list(){
         return patientService.list();
+    }
+
+    @GetMapping("/treatment")
+    public List<Treatment> listTreatments(@RequestBody Patient patient){
+        return treatmentService.listTreatmentsByPatientId(patient);
     }
 
     @GetMapping("/{id}")

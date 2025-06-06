@@ -18,22 +18,21 @@ import java.util.List;
 @Getter
 @Setter
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Patient extends Person{
+public class Patient extends Person {
 
     private String profession;
 
-    @ManyToMany(mappedBy = "patients")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Treatment> treatments;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "medical_record_id")
     private MedicalRecord medicalRecord;
 
-
-    public Patient(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber, String neighborhood, Gender gender, String rg, String profession) {
+    public Patient(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber,
+            String neighborhood, Gender gender, String rg, String profession) {
         super(name, CPF, birthDate, phoneNumber, address, addressNumber, neighborhood, gender, rg);
         this.profession = profession;
     }
-
 
 }

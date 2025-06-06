@@ -20,17 +20,17 @@ public class TreatmentController {
         return treatmentService.list();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Treatment findById(@PathVariable("id") Long id) {
         return treatmentService.findById(id);
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public Treatment create(@RequestBody Treatment treatment) {
         return treatmentService.create(treatment);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         treatmentService.delete(id);
     }
