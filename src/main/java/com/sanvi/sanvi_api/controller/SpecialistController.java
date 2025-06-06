@@ -26,6 +26,7 @@ public class SpecialistController {
 
     @PostMapping("create")
     public Specialist create(@RequestBody Specialist Specialist){
+         System.out.println("Recebido: " + Specialist);
         return SpecialistService.create(Specialist);
     }
 
