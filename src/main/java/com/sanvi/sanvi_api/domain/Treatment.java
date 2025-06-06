@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Getter
 @Setter
@@ -34,9 +36,11 @@ public class Treatment {
             joinColumns = @JoinColumn(name="treatment_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id")
     )
+    @JsonManagedReference
     private List<Patient> patients;
 
     @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PaymentEntry> paymentEntries = new ArrayList<>();
 
     @OneToMany
