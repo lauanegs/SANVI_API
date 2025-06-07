@@ -30,14 +30,9 @@ public class Treatment {
     @Column(nullable = true)
     private LocalDate endedAt;
 
-    @ManyToMany
-    @JoinTable(
-            name="patient_treatment",
-            joinColumns = @JoinColumn(name="treatment_id"),
-            inverseJoinColumns = @JoinColumn(name = "patient_id")
-    )
-    @JsonManagedReference
-    private List<Patient> patients;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 
     @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
