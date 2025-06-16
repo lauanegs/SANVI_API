@@ -1,7 +1,11 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.MedicalRecordDTO;
 import com.sanvi.sanvi_api.domain.Patient;
+import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.service.PatientService;
+import com.sanvi.sanvi_api.service.TreatmentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,22 +18,30 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private TreatmentService treatmentService;
+
     @GetMapping
     public List<Patient> list(){
         return patientService.list();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/treatment")
+    public List<Treatment> listTreatments(@RequestBody Patient patient){
+        return treatmentService.listTreatmentsByPatientId(patient);
+    }
+
+    @GetMapping("/{id}")
     public Patient findById(@PathVariable("id") Long Id){
         return patientService.findById(Id);
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public Patient create(@RequestBody Patient patient){
         return patientService.create(patient);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id){
         patientService.delete(id);
     }
@@ -39,4 +51,9 @@ public class PatientController {
         return patientService.update(patient);
     }
 
+    @PostMapping("/medical_record")
+    public void setMedicalRecord(@RequestBody MedicalRecordDTO medicalRecord){
+        patientService.setMedicalRecord(medicalRecord);
+
+    }
 }

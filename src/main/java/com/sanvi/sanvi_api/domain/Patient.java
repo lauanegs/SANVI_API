@@ -1,11 +1,13 @@
 package com.sanvi.sanvi_api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sanvi.sanvi_api.domain.enums.Gender;
 import com.sanvi.sanvi_api.service.PatientService;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
@@ -13,15 +15,24 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Patient extends Person{
+@Getter
+@Setter
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Patient extends Person {
 
     private String profession;
 
-    @ManyToMany(mappedBy = "patients")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Treatment> treatments;
 
-    public Patient(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber, String neighborhood, Gender gender, String rg, String profession) {
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "medical_record_id")
+    private MedicalRecord medicalRecord;
+
+    public Patient(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber,
+            String neighborhood, Gender gender, String rg, String profession) {
         super(name, CPF, birthDate, phoneNumber, address, addressNumber, neighborhood, gender, rg);
         this.profession = profession;
     }
+
 }
