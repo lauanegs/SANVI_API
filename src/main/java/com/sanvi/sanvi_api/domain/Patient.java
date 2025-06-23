@@ -24,7 +24,7 @@ public class Patient extends Person {
     private String profession;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "treatments")
     private List<Treatment> treatments;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
