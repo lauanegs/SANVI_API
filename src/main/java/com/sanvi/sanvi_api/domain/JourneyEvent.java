@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Id;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDate;
 
@@ -27,6 +28,7 @@ public class JourneyEvent {
     
 
     @ManyToOne
+    @JsonBackReference
     private Treatment treatment;
     // Imagem?
 

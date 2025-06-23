@@ -1,13 +1,15 @@
 package com.sanvi.sanvi_api.service;
 
+import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.domain.Treatment;
-import com.sanvi.sanvi_api.repository.TreatmentRepository;
+import com.sanvi.sanvi_api.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TreatmentService {
@@ -15,12 +17,22 @@ public class TreatmentService {
     @Autowired
     private TreatmentRepository treatmentRepository;
 
+    @Autowired
+    private PatientRepository patientRepository;
+
     public List<Treatment> list() {
         return treatmentRepository.findAll();
     }
 
-    public List<Treatment> listTreatmentsByPatientId(Patient patient) {
-        return treatmentRepository.findAllByPatient(patient);
+    public List<TreatmentDTO> listTreatmentsByPatientId(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        List<Treatment> treatments = treatmentRepository.findAllByPatient(patient);
+
+        return treatments.stream()
+                .map(t -> new TreatmentDTO(t.getId(), t.getTitle()))
+                .collect(Collectors.toList());
     }
 
     public Treatment findById(Long id) {
@@ -45,6 +57,5 @@ public class TreatmentService {
         }
         treatmentRepository.deleteById(id);
     }
-
 
 }
