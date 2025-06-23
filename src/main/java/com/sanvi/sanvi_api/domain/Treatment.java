@@ -32,7 +32,7 @@ public class Treatment {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PaymentEntry> paymentEntries = new ArrayList<>();
 
     @OneToMany

@@ -1,11 +1,15 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -38,5 +42,24 @@ public class TreatmentController {
     @PutMapping
     public Treatment update(@RequestBody Treatment treatment) {
         return treatmentService.update(treatment);
+    }
+
+
+
+    @GetMapping("/dto")
+    public List<TreatmentDTO> listDTO() {
+        return treatmentService.list()
+            .stream()
+            .map(treatmentService::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
+    @GetMapping("/dto/{id}")
+    public TreatmentDTO findByIdDTO(@PathVariable Long id) {
+        Treatment treatment = treatmentService.findById(id);
+        if (treatment == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Treatment not found");
+        }
+        return treatmentService.convertToDTO(treatment);
     }
 }
