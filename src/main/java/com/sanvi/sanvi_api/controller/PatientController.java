@@ -47,14 +47,21 @@ public class PatientController {
         }).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}/treatment")
-    public List<TreatmentDTO> listTreatments(@PathVariable Long id) {
-        return treatmentService.listTreatmentsByPatientId(id);
+    @GetMapping("/treatment")
+    public List<Treatment> listTreatments(@RequestBody Patient patient){
+        return treatmentService.listTreatmentsByPatientId(patient);
     }
+
+    
 
     @GetMapping("/{id}")
     public Patient findById(@PathVariable("id") Long Id) {
         return patientService.findById(Id);
+    }
+
+    @GetMapping("/{id}/treatment")
+    public List<TreatmentDTO> listTreatments(@PathVariable Long id) {
+        return treatmentService.listTreatmentsByPatientId(id);
     }
 
     @PostMapping("/create")

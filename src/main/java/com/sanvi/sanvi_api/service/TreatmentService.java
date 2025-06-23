@@ -3,6 +3,7 @@ package com.sanvi.sanvi_api.service;
 import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.domain.Treatment;
+import com.sanvi.sanvi_api.repository.PatientRepository;
 import com.sanvi.sanvi_api.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class TreatmentService {
 
     @Autowired
     private TreatmentRepository treatmentRepository;
+
+    @Autowired
+    private PatientRepository patientRepository;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -41,6 +45,17 @@ public class TreatmentService {
     }
 
     public Treatment create(Treatment treatment) {
+
+        Long patientId = treatment.getPatient().getId();
+
+
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com o id: " + patientId));
+
+        treatment.setPatient(patient);
+
+        patient.getTreatments().add(treatment);
+
         return treatmentRepository.save(treatment);
     }
 
@@ -48,6 +63,17 @@ public class TreatmentService {
         if (treatment.getId() == null || !treatmentRepository.existsById(treatment.getId())) {
             throw new RuntimeException("Não é possível atualizar: tratamento inexistente.");
         }
+        return treatmentRepository.save(treatment);
+    }
+
+    public void delete(Long id) {
+        if (!treatmentRepository.existsById(id)) {
+            throw new RuntimeException("Tratamento não encontrado com id: " + id);
+        }
+        treatmentRepository.deleteById(id);
+    }
+
+    public Treatment update(Treatment treatment) {
         return treatmentRepository.save(treatment);
     }
 

@@ -25,7 +25,7 @@ public class PatientService {
     }
 
     public List<Patient> list(){
-        return patientRepository.findAll();
+        return patientRepository.findAllByOrderByNameAsc();
     }
 
     public void delete(Long id){

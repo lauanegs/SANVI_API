@@ -2,6 +2,7 @@ package com.sanvi.sanvi_api.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sanvi.sanvi_api.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class PaymentEntry
 
     @ManyToOne
     @JoinColumn(name="treatment_id", nullable = true)
-    @JsonBackReference
+    @JsonBackReference(value = "paymentEntries")
     private Treatment treatment;
 
     private int billingPaid;
