@@ -1,6 +1,7 @@
 package com.sanvi.sanvi_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sanvi.sanvi_api.domain.enums.Gender;
 import com.sanvi.sanvi_api.service.PatientService;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class Patient extends Person {
     private String profession;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "treatments")
     private List<Treatment> treatments;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

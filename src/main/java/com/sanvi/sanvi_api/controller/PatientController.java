@@ -26,7 +26,7 @@ public class PatientController {
         return patientService.list();
     }
 
-    @GetMapping("/treatment")
+    @PostMapping("/treatment")
     public List<Treatment> listTreatments(@RequestBody Patient patient){
         return treatmentService.listTreatmentsByPatientId(patient);
     }
