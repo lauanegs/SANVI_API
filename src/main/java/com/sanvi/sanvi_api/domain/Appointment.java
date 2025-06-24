@@ -1,13 +1,12 @@
 package com.sanvi.sanvi_api.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sanvi.sanvi_api.domain.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.ManyToOne;
-
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -26,10 +25,12 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
+    @JsonBackReference(value="appointments_patient")
     private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "specialist_id", nullable = false)
+    @JsonBackReference(value="appointments_specialist")
     private Specialist specialist;
 
     private AppointmentStatus status;
