@@ -1,23 +1,20 @@
-package com.sanvi.sanvi_api.domain;
-
+package com.sanvi.sanvi_api.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicalRecordData implements Serializable {
-    private String mainComplaint;
+public class MedicalRecordDataDTO {
     private String diseaseHistory;
+    private String mainComplaint;
+    private String medicalTreatment;
     private String pastMedicalHistory;
     private String healthProblem;
-    private String medicalTreatment;
     private String familyMedicalHistory;
+;
 }
-

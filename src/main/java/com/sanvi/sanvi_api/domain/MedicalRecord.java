@@ -19,7 +19,9 @@ public class MedicalRecord extends BaseEntity{
     @Id
     private Long id;
 
-    @OneToOne(mappedBy = "medicalRecord")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    @MapsId
     @JsonIgnore
     private Patient patient;
 

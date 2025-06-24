@@ -1,5 +1,7 @@
 package com.sanvi.sanvi_api.controller;
 
+import com.sanvi.sanvi_api.controller.dto.TreatmentFullDTO;
+import com.sanvi.sanvi_api.controller.dto.TreatmentFullPostDTO;
 import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +28,17 @@ public class TreatmentController {
     }
 
     @PostMapping("/create")
-    public Treatment create(@RequestBody Treatment treatment) {
-        return treatmentService.create(treatment);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        treatmentService.delete(id);
+    public Treatment create(@RequestBody TreatmentFullPostDTO treatmentFullPostDTO) {
+        return treatmentService.create(treatmentFullPostDTO);
     }
 
     @PutMapping
     public Treatment update(@RequestBody Treatment treatment) {
         return treatmentService.update(treatment);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        treatmentService.delete(id);
     }
 }

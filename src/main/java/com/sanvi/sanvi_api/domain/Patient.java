@@ -2,6 +2,7 @@ package com.sanvi.sanvi_api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sanvi.sanvi_api.domain.enums.Gender;
 import com.sanvi.sanvi_api.service.PatientService;
 import jakarta.persistence.*;
@@ -27,8 +28,11 @@ public class Patient extends Person {
     @JsonManagedReference(value = "treatments")
     private List<Treatment> treatments;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "medical_record_id")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "appointments_patient")
+    private List<Appointment> appointments;
+
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private MedicalRecord medicalRecord;
 
     public Patient(String name, String CPF, Date birthDate, Long phoneNumber, String address, int addressNumber,
