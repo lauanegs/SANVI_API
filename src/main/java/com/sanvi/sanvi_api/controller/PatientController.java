@@ -49,7 +49,7 @@ public class PatientController {
 
     @GetMapping("/treatment")
     public List<Treatment> listTreatments(@RequestBody Patient patient){
-        return treatmentService.listTreatmentsByPatientId(patient);
+        return treatmentService.listTreatmentsByPatient(patient);
     }
 
     

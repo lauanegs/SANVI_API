@@ -21,9 +21,6 @@ public class TreatmentService {
     @Autowired
     private PatientRepository patientRepository;
 
-    @Autowired
-    private PatientRepository patientRepository;
-
     public List<Treatment> list() {
         return treatmentRepository.findAll();
     }
@@ -37,6 +34,15 @@ public class TreatmentService {
         return treatments.stream()
                 .map(t -> new TreatmentDTO(t.getId(), t.getTitle()))
                 .collect(Collectors.toList());
+    }
+
+    public List<Treatment> listTreatmentsByPatient(Patient patientReq) {
+        var patientId = patientReq.getId();
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        return treatmentRepository.findAllByPatient(patient);
+
     }
 
     public Treatment findById(Long id) {
@@ -63,17 +69,6 @@ public class TreatmentService {
         if (treatment.getId() == null || !treatmentRepository.existsById(treatment.getId())) {
             throw new RuntimeException("Não é possível atualizar: tratamento inexistente.");
         }
-        return treatmentRepository.save(treatment);
-    }
-
-    public void delete(Long id) {
-        if (!treatmentRepository.existsById(id)) {
-            throw new RuntimeException("Tratamento não encontrado com id: " + id);
-        }
-        treatmentRepository.deleteById(id);
-    }
-
-    public Treatment update(Treatment treatment) {
         return treatmentRepository.save(treatment);
     }
 
