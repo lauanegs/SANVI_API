@@ -1,5 +1,8 @@
 package com.sanvi.sanvi_api.controller.dto;
 
+import com.sanvi.sanvi_api.domain.enums.PaymentStatus;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,20 +12,37 @@ public class TreatmentDTO {
     private String title;
     private LocalDate startedAt;
     private LocalDate endedAt;
+
+    private BigDecimal totalValue;
+    private BigDecimal amountPaid;
+    private PaymentStatus paymentStatus;
+    private Integer totalInstallments;
+
     private List<PaymentEntryDTO> paymentEntries;
     private PatientDTO patient;
+
+    private boolean overdue; // ✅ novo campo
 
     public TreatmentDTO() {}
 
     public TreatmentDTO(Long id, String title, LocalDate startedAt, LocalDate endedAt,
-                        List<PaymentEntryDTO> paymentEntries, PatientDTO patient) {
+                        BigDecimal totalValue, BigDecimal amountPaid, PaymentStatus paymentStatus,
+                        Integer totalInstallments, List<PaymentEntryDTO> paymentEntries,
+                        PatientDTO patient, boolean overdue) {
         this.id = id;
         this.title = title;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.totalValue = totalValue;
+        this.amountPaid = amountPaid;
+        this.paymentStatus = paymentStatus;
+        this.totalInstallments = totalInstallments;
         this.paymentEntries = paymentEntries;
         this.patient = patient;
+        this.overdue = overdue; // ✅ novo campo no construtor
     }
+
+    // Getters e setters
 
     public Long getId() {
         return id;
@@ -56,6 +76,38 @@ public class TreatmentDTO {
         this.endedAt = endedAt;
     }
 
+    public BigDecimal getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public BigDecimal getAmountPaid() {
+        return amountPaid;
+    }
+
+    public void setAmountPaid(BigDecimal amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Integer getTotalInstallments() {
+        return totalInstallments;
+    }
+
+    public void setTotalInstallments(Integer totalInstallments) {
+        this.totalInstallments = totalInstallments;
+    }
+
     public List<PaymentEntryDTO> getPaymentEntries() {
         return paymentEntries;
     }
@@ -70,5 +122,13 @@ public class TreatmentDTO {
 
     public void setPatient(PatientDTO patient) {
         this.patient = patient;
+    }
+
+    public boolean isOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        this.overdue = overdue;
     }
 }
