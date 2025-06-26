@@ -6,11 +6,21 @@ import com.sanvi.sanvi_api.controller.dto.TreatmentFullPostDTO;
 import com.sanvi.sanvi_api.domain.Patient;
 import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.repository.*;
+import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
+import com.sanvi.sanvi_api.controller.dto.PatientDTO;
+import com.sanvi.sanvi_api.controller.dto.PaymentEntryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sanvi.sanvi_api.service.PaymentService;
+
+
+import com.sanvi.sanvi_api.service.PaymentService;
+
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +29,9 @@ public class TreatmentService {
 
     @Autowired
     private TreatmentRepository treatmentRepository;
+
+    @Autowired
+    private PaymentService paymentService; // ✅ Novo: injetar o PaymentService
 
     @Autowired
     private PatientRepository patientRepository;
@@ -34,7 +47,7 @@ public class TreatmentService {
         List<Treatment> treatments = treatmentRepository.findAllByPatient(patient);
 
         return treatments.stream()
-                .map(t -> new TreatmentDTO(t.getId(), t.getTitle()))
+                .map(t -> new TreatmentDTO(t.getId(), t.getTitle(), null, null, null, null, null, null, null, null, false))
                 .collect(Collectors.toList());
     }
 
@@ -85,6 +98,7 @@ public class TreatmentService {
         if (treatment.getId() == null || !treatmentRepository.existsById(treatment.getId())) {
             throw new RuntimeException("Não é possível atualizar: tratamento inexistente.");
         }
+        treatment.updatePaymentStatus(); // calcula status com base nas parcelas
         return treatmentRepository.save(treatment);
     }
 
@@ -95,4 +109,46 @@ public class TreatmentService {
         treatmentRepository.deleteById(id);
     }
 
+    
+
+    public PatientDTO convertToPatientDTO(Patient patient) {
+        if (patient == null) return null;
+
+        return new PatientDTO(
+            patient.getId(),
+            patient.getName(),
+            patient.getPhoneNumber()
+        );
+    }
+
+    public TreatmentDTO convertToDTO(Treatment treatment) {
+        List<PaymentEntryDTO> paymentEntryDTOS = treatment.getPaymentEntries()
+            .stream()
+            .map(pe -> new PaymentEntryDTO(
+                pe.getId(),
+                pe.getValue(),
+                pe.getInstallmentNumber(),
+                pe.getDueDate(),
+                pe.getPaymentDate()
+            ))
+            .collect(Collectors.toList());
+
+        PatientDTO patientDTO = convertToPatientDTO(treatment.getPatient());
+
+        boolean overdue = paymentService.hasOverduePayments(treatment.getId()); // ✅ Verifica atraso
+
+        return new TreatmentDTO(
+            treatment.getId(),
+            treatment.getTitle(),
+            treatment.getStartedAt(),
+            treatment.getEndedAt(),
+            treatment.getTotalValue(),
+            treatment.getAmountPaid(),
+            treatment.getPaymentStatus(),
+            treatment.getTotalInstallments(),
+            paymentEntryDTOS,
+            patientDTO,
+            overdue // ✅ Envia no DTO
+        );
+    }
 }
