@@ -3,9 +3,11 @@ package com.sanvi.sanvi_api.service;
 import com.sanvi.sanvi_api.controller.dto.MedicalRecordPostDTO;
 import com.sanvi.sanvi_api.controller.dto.MedicalRecordPutDTO;
 import com.sanvi.sanvi_api.controller.dto.PatientPostDTO;
+import com.sanvi.sanvi_api.controller.dto.PatientPutDTO;
 import com.sanvi.sanvi_api.domain.MedicalRecord;
 import com.sanvi.sanvi_api.domain.MedicalRecordData;
 import com.sanvi.sanvi_api.domain.Patient;
+import com.sanvi.sanvi_api.repository.MedicalRecordRepository;
 import com.sanvi.sanvi_api.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
 
     public Patient create(PatientPostDTO patientPostDTO){
         Patient patient = new Patient();
@@ -72,7 +77,44 @@ public class PatientService {
         patientRepository.deleteById(id);
     }
 
-    public Patient update(Patient patient){
+    public Patient update(PatientPutDTO patientPutDTO){
+        Patient patient = patientRepository.findById(patientPutDTO.getId())
+            .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(patientPutDTO.getId())
+            .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+
+        patient.setAddress(patientPutDTO.getAddress());
+        patient.setAddressNumber(patientPutDTO.getAddressNumber());
+        patient.setBirthDate(patientPutDTO.getBirthDate());
+        patient.setCEP(patientPutDTO.getCep());
+        patient.setCPF(patientPutDTO.getCpf());
+        patient.setPhoneNumber(patientPutDTO.getPhoneNumber());
+        patient.setGender(patientPutDTO.getGender());
+        patient.setGuardianCPF(patientPutDTO.getGuardianCPF());
+        patient.setGuardianName(patientPutDTO.getGuardianName());
+        patient.setGuardianPhoneNumber(patientPutDTO.getGuardianPhoneNumber());
+        patient.setName(patientPutDTO.getName());
+        patient.setUpdatedAt(patientPutDTO.getUpdatedAt());
+        patient.setNeighborhood(patientPutDTO.getNeighborhood());
+        patient.setProfession(patientPutDTO.getProfession());
+        patient.setRg(patientPutDTO.getRg());
+        patient.setUf(patientPutDTO.getUf());
+
+        MedicalRecordData newMedicalRecordData = medicalRecord.getMedicalRecordData();
+        newMedicalRecordData.setDiseaseHistory(patientPutDTO.getMedicalRecord().getMedicalRecordData().getDiseaseHistory());
+        newMedicalRecordData.setFamilyMedicalHistory(patientPutDTO.getMedicalRecord().getMedicalRecordData().getFamilyMedicalHistory());
+        newMedicalRecordData.setHealthProblem(patientPutDTO.getMedicalRecord().getMedicalRecordData().getHealthProblem());
+        newMedicalRecordData.setMainComplaint(patientPutDTO.getMedicalRecord().getMedicalRecordData().getMainComplaint());
+        newMedicalRecordData.setMedicalTreatment(patientPutDTO.getMedicalRecord().getMedicalRecordData().getMedicalTreatment());
+        newMedicalRecordData.setPastMedicalHistory(patientPutDTO.getMedicalRecord().getMedicalRecordData().getPastMedicalHistory());
+
+        medicalRecord.setMedicalRecordData(newMedicalRecordData);
+        medicalRecord.setHasHealthProblem(patientPutDTO.getMedicalRecord().getHasHealthProblem());
+        medicalRecord.setHasMedicalTreatment(patientPutDTO.getMedicalRecord().getHasMedicalTreatment());
+        medicalRecord.setIsPregnant(patientPutDTO.getMedicalRecord().getIsPregnant());
+        medicalRecord.setUpdatedAt(patientPutDTO.getMedicalRecord().getUpdatedAt());
+
         return patientRepository.save(patient);
     }
 
