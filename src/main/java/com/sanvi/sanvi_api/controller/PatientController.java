@@ -4,6 +4,7 @@ import com.sanvi.sanvi_api.controller.dto.MedicalRecordPostDTO;
 import com.sanvi.sanvi_api.controller.dto.MedicalRecordPutDTO;
 import com.sanvi.sanvi_api.controller.dto.PatientDTO;
 import com.sanvi.sanvi_api.controller.dto.PatientPostDTO;
+import com.sanvi.sanvi_api.controller.dto.PatientPutDTO;
 import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.controller.dto.TreatmentFullDTO;
 import com.sanvi.sanvi_api.domain.Patient;
@@ -76,8 +77,8 @@ public class PatientController {
     }
 
     @PutMapping
-    public Patient update(@RequestBody Patient patient) {
-        return patientService.update(patient);
+    public Patient update(@RequestBody PatientPutDTO patientPutDTO) {
+        return patientService.update(patientPutDTO);
     }
 
     @PutMapping("/medical-record")
