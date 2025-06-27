@@ -55,20 +55,23 @@ public class Treatment {
     @JsonManagedReference(value = "journeyEvents")
     private List<JourneyEvent> events = new ArrayList<>();
 
-    public void updatePaymentStatus() {
-        BigDecimal paid = paymentEntries.stream()
-            .filter(p -> p.getPaymentDate() != null)
-            .map(PaymentEntry::getValue)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+   public void updatePaymentStatus() {
+    BigDecimal paid = paymentEntries.stream()
+        .filter(p -> p.getPaymentDate() != null)
+        .map(PaymentEntry::getValue)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        this.amountPaid = paid;
+    this.amountPaid = paid;
 
-        if (paid.compareTo(totalValue) >= 0) {
-            this.paymentStatus = PaymentStatus.Pago;
-        } else if (paid.compareTo(BigDecimal.ZERO) == 0) {
-            this.paymentStatus = PaymentStatus.Pendente;
-        } else {
-            this.paymentStatus = PaymentStatus.Parcial;
-        } 
+    BigDecimal total = this.totalValue != null ? this.totalValue : BigDecimal.ZERO;
+
+    if (paid.compareTo(total) >= 0 && total.compareTo(BigDecimal.ZERO) > 0) {
+        this.paymentStatus = PaymentStatus.Pago;
+    } else if (paid.compareTo(BigDecimal.ZERO) == 0) {
+        this.paymentStatus = PaymentStatus.Pendente;
+    } else {
+        this.paymentStatus = PaymentStatus.Parcial;
     }
+}
+
 }
