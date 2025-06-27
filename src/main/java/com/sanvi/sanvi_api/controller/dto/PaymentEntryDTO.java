@@ -3,6 +3,8 @@ package com.sanvi.sanvi_api.controller.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.sanvi.sanvi_api.domain.PaymentEntry;
+
 public class PaymentEntryDTO {
 
     private Long id;
@@ -20,7 +22,16 @@ public class PaymentEntryDTO {
         this.installmentNumber = installmentNumber;
         this.dueDate = dueDate;
         this.paymentDate = paymentDate;
+        
     }
+
+    public PaymentEntryDTO(PaymentEntry entry) {
+    this.id = entry.getId();
+    this.value = entry.getValue();
+    this.installmentNumber = entry.getInstallmentNumber();
+    this.dueDate = entry.getDueDate();
+    this.paymentDate = entry.getPaymentDate();
+}
 
     public Long getId() {
         return id;

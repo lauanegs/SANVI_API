@@ -2,11 +2,17 @@
 
 package com.sanvi.sanvi_api.controller.dto;
 
+import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.domain.enums.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import java.util.stream.Collectors;
+import com.sanvi.sanvi_api.domain.Treatment;
+import com.sanvi.sanvi_api.domain.PaymentEntry;
 
 public class TreatmentDTO {
 
@@ -43,6 +49,26 @@ public class TreatmentDTO {
         this.patient = patient;
         this.overdue = overdue; // ✅ novo campo no construtor
     }
+
+    public TreatmentDTO(Treatment treatment) {
+    this.id = treatment.getId();
+    this.title = treatment.getTitle();
+    this.startedAt = treatment.getStartedAt();
+    this.endedAt = treatment.getEndedAt();
+    this.totalValue = treatment.getTotalValue();
+    this.amountPaid = treatment.getAmountPaid();
+    this.paymentStatus = treatment.getPaymentStatus();
+    this.totalInstallments = treatment.getTotalInstallments();
+    this.patient = new PatientDTO(treatment.getPatient());
+
+    this.paymentEntries = treatment.getPaymentEntries()
+        .stream()
+        .map(PaymentEntryDTO::new)
+        .collect(Collectors.toList());
+
+    this.overdue = this.paymentEntries.stream()
+        .anyMatch(p -> p.getPaymentDate() == null && p.getDueDate().isBefore(LocalDate.now()));
+}
 
     // Getters e setters
 

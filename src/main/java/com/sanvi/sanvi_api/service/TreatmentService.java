@@ -4,7 +4,9 @@ import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.controller.dto.TreatmentFullDTO;
 import com.sanvi.sanvi_api.controller.dto.TreatmentFullPostDTO;
 import com.sanvi.sanvi_api.domain.Patient;
+import com.sanvi.sanvi_api.domain.PaymentEntry;
 import com.sanvi.sanvi_api.domain.Treatment;
+import com.sanvi.sanvi_api.domain.enums.PaymentStatus;
 import com.sanvi.sanvi_api.repository.*;
 import com.sanvi.sanvi_api.controller.dto.TreatmentDTO;
 import com.sanvi.sanvi_api.controller.dto.PatientDTO;
@@ -17,7 +19,7 @@ import com.sanvi.sanvi_api.service.PaymentService;
 
 import com.sanvi.sanvi_api.service.PaymentService;
 
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -150,5 +152,43 @@ public class TreatmentService {
             patientDTO,
             overdue // ✅ Envia no DTO
         );
+    }
+
+
+
+
+public Treatment saveWithPayments(TreatmentDTO dto) {
+        // Busca o paciente pelo ID
+        Patient patient = patientRepository.findById(dto.getPatient().getId())
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        // Cria o Treatment
+        Treatment treatment = new Treatment();
+        treatment.setTitle(dto.getTitle());
+        treatment.setStartedAt(dto.getStartedAt());
+        treatment.setEndedAt(dto.getEndedAt());
+        treatment.setTotalValue(dto.getTotalValue());
+        treatment.setAmountPaid(BigDecimal.ZERO);
+        treatment.setPaymentStatus(PaymentStatus.Pendente);
+        treatment.setTotalInstallments(dto.getTotalInstallments());
+        treatment.setPatient(patient);
+
+        // Cria e vincula os pagamentos
+        List<PaymentEntry> entries = dto.getPaymentEntries().stream().map(paymentDto -> {
+            PaymentEntry entry = new PaymentEntry();
+            entry.setValue(paymentDto.getValue());
+            entry.setInstallmentNumber(paymentDto.getInstallmentNumber());
+            entry.setDueDate(paymentDto.getDueDate());
+            entry.setPaymentDate(paymentDto.getPaymentDate()); // Pode ser null
+            entry.setTreatment(treatment); // MUITO IMPORTANTE
+            return entry;
+        }).toList();
+
+        treatment.setPaymentEntries(entries);
+
+        treatment.updatePaymentStatus();
+
+        // Salva com Cascade.ALL
+        return treatmentRepository.save(treatment);
     }
 }

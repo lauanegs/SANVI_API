@@ -70,5 +70,5 @@ public class Treatment {
         } else {
             this.paymentStatus = PaymentStatus.Parcial;
         } 
-}
+    }
 }

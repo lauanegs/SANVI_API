@@ -2,6 +2,8 @@ package com.sanvi.sanvi_api.controller.dto;
 
 import java.io.Serializable;
 
+import com.sanvi.sanvi_api.domain.Patient;
+
 public class PatientDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +20,12 @@ public class PatientDTO implements Serializable {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
+    }
+
+    public PatientDTO(Patient patient) {
+    this.id = patient.getId();
+    this.name = patient.getName();
+    this.phoneNumber = patient.getPhoneNumber();
     }
 
     // Getters e Setters

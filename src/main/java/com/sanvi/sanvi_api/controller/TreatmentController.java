@@ -7,6 +7,7 @@ import com.sanvi.sanvi_api.domain.Treatment;
 import com.sanvi.sanvi_api.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -63,5 +64,12 @@ public class TreatmentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Treatment not found");
         }
         return treatmentService.convertToDTO(treatment);
+    }
+
+
+    @PostMapping("/fixed")
+    public ResponseEntity<TreatmentDTO> createTreatment(@RequestBody TreatmentDTO dto) {
+        Treatment treatment = treatmentService.saveWithPayments(dto);
+        return ResponseEntity.ok(new TreatmentDTO(treatment));
     }
 }
